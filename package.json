@@ -1,0 +1,29 @@
+{
+	"name": "singleshop",
+	"version": "1.0.0",
+	"description": "",
+	"main": "index.js",
+	"scripts": {
+		"dev": "concurrently \"cd api && npm run dev\" \"cd web && npm run dev\"",
+		"postinstall": "lerna exec -- npm i && lerna run prepare"
+	},
+	"author": "",
+	"license": "ISC",
+	"devDependencies": {
+		"@commitlint/cli": "^11.0.0",
+		"@commitlint/config-conventional": "^11.0.0",
+		"concurrently": "^5.3.0",
+		"husky": "^4.3.8",
+		"lerna": "^3.22.1"
+	},
+	"lint-staged": {
+		"web/*.{js,vue}": "eslint",
+		"web/*.{css,vue}": "stylelint"
+	},
+	"husky": {
+		"hooks": {
+			"commit-msg": "commitlint -E HUSKY_GIT_PARAMS",
+			"pre-commit": "lint-staged"
+		}
+	}
+}
