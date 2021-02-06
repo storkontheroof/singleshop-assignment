@@ -1,6 +1,12 @@
 # SingleShop Assignment
 My attempt to rebuild the SingleShop Phones page.
 
+## Requirements
+```bash
+# node (min v10.13, preferred LTS)
+* https://github.com/Schniz/fnm
+```
+# Build setup 
 ```bash
 # clone the repo
 $ git clone git@github.com:storkontheroof/singleshop-assignment.git

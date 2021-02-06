@@ -1,7 +1,8 @@
 export default {
   // Global page headers: https://go.nuxtjs.dev/config-head
   head: {
-    title: 'singleshop-phones',
+    titleTemplate: '%s - singleshop-web',
+    title: 'singleshop-web',
     meta: [
       { charset: 'utf-8' },
       { name: 'viewport', content: 'width=device-width, initial-scale=1' },
@@ -14,37 +15,54 @@ export default {
   css: [],
 
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
-  plugins: [],
+  plugins: ['~/plugins/axios.js'],
 
   // Auto import components: https://go.nuxtjs.dev/config-components
   components: true,
 
   // Modules for dev and build (recommended): https://go.nuxtjs.dev/config-modules
   buildModules: [
-    // https://go.nuxtjs.dev/typescript
-    '@nuxt/typescript-build',
+    // https://go.nuxtjs.dev/eslint
+    '@nuxtjs/eslint-module',
     // https://go.nuxtjs.dev/stylelint
     '@nuxtjs/stylelint-module',
-    // https://go.nuxtjs.dev/tailwindcss
-    '@nuxtjs/tailwindcss',
+    // https://go.nuxtjs.dev/vuetify
+    '@nuxtjs/vuetify',
   ],
 
   // Modules: https://go.nuxtjs.dev/config-modules
   modules: [
     // https://go.nuxtjs.dev/axios
     '@nuxtjs/axios',
+    '@nuxtjs/proxy',
     // https://go.nuxtjs.dev/pwa
     '@nuxtjs/pwa',
+    // https://go.nuxtjs.dev/content
+    '@nuxt/content',
   ],
 
   // Axios module configuration: https://go.nuxtjs.dev/config-axios
-  axios: {},
+  axios: {
+    baseURL: 'http://localhost:3001',
+    credentials: false,
+  },
 
   // PWA module configuration: https://go.nuxtjs.dev/pwa
   pwa: {
     manifest: {
       lang: 'en',
     },
+  },
+
+  // Content module configuration: https://go.nuxtjs.dev/config-content
+  content: {},
+
+  // Vuetify module configuration: https://go.nuxtjs.dev/config-vuetify
+  vuetify: {
+    treeShake: true,
+    customVariables: ['~/assets/variables.scss'],
+    icons: false,
+    theme: {},
   },
 
   // Build Configuration: https://go.nuxtjs.dev/config-build

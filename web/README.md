@@ -1,10 +1,14 @@
-# singleshop-phones
+# singleshop-web
 
+## Requirements
+```bash
+# node (min v10.13, preferred LTS)
+* https://github.com/Schniz/fnm
+```
 ## Build Setup
-
 ```bash
 # install dependencies
-$ npm install
+$ npm run install
 
 # serve with hot reload at localhost:3000
 $ npm run dev
