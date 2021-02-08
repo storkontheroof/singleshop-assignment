@@ -2,11 +2,8 @@
   <div class="card product-card">
     <div class="product-colors">
       <ul>
-        <li
-          v-for="variant in product.variants"
-          v-bind:key="variant.attributes.color"
-        >
-          <span v-html="variant.attributes.color" />
+        <li v-for="color in product.colors" v-bind:key="color">
+          <span v-html="color" />
         </li>
       </ul>
     </div>
