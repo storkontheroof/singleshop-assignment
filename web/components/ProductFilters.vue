@@ -1,20 +1,33 @@
 <template>
-  <div>
-    <h1>Filter telefoons</h1>
-    <div class="d-flex d-sm-none my-6">
-      <v-btn block @click="toggle">Filters</v-btn>
-    </div>
-    <div :class="classes">
-      <div class="d-flex d-sm-none my-6">
-        <v-btn block @click="toggle">Close</v-btn>
-      </div>
+  <div v-if="loaded">
+    <div v-if="!useDrawer" class="d-flex flex-row my-6">
       <div v-for="filter in filters" :key="filter.name">
         <ProductFilter
-          :items="filter.items"
+          :name="filter.name"
+          :items="productsForFilter(filter)"
           :title="filter.title"
-          :value="filter.selected"
+          :value="filter.value"
+          @
         />
       </div>
+    </div>
+
+    <div class="d-flex my-6" v-if="useDrawer">
+      <v-btn block @click.stop="toggleDrawer">Filters</v-btn>
+
+      <v-navigation-drawer v-model="drawer" absolute top temporary>
+        <div class="d-flex my-6">
+          <v-btn block @click.stop="toggleDrawer">Close</v-btn>
+        </div>
+        <div v-for="filter in filters" :key="filter.name">
+          <ProductFilter
+            :name="filter.name"
+            :items="filter.items"
+            :title="filter.title"
+            :value="filter.selected"
+          />
+        </div>
+      </v-navigation-drawer>
     </div>
   </div>
 </template>
@@ -24,25 +37,25 @@ import { mapGetters } from 'vuex'
 export default {
   data() {
     return {
-      isOpen: false,
+      loaded: false,
+      drawer: false,
     }
   },
   computed: {
-    ...mapGetters({ filters: 'products/filters' }),
-    classes() {
-      const classes = [
-        this.$vuetify.breakpoint.width >= 600
-          ? 'd-flex flex-row mb-6'
-          : 'd-flex flex-column mb-6 fixed',
-        this.isOpen ? 'is-open' : '',
-      ]
-
-      return classes
+    ...mapGetters({
+      filters: 'products/filters',
+      productsForFilter: 'products/productsForFilter',
+    }),
+    useDrawer() {
+      return this.$vuetify.breakpoint.xs
     },
   },
+  mounted() {
+    this.loaded = true
+  },
   methods: {
-    toggle() {
-      this.isOpen = !this.isOpen
+    toggleDrawer() {
+      this.drawer = !this.drawer
     },
   },
 }
@@ -60,7 +73,7 @@ export default {
   height: 100%;
   padding: 24px;
   transform: translateX(-100%);
-  transition: all 0.25s ease-out;
+  //transition: all 0.25s ease-out;
 
   &.is-open {
     transform: translateX(0);

@@ -1,10 +1,13 @@
 <template>
   <Container class="section-phones">
-    <Heading> Telefoons </Heading>
+    <Heading>
+      <span class="font-weight-light">Kies uit</span>
+      {{ filteredProducts.length }} smartphones
+    </Heading>
 
     <ProductFilters />
     <ProductGrid>
-      <ProductGridItem v-for="product in products" :key="product.id">
+      <ProductGridItem v-for="product in filteredProducts" :key="product.id">
         <ProductCard :product="product" />
       </ProductGridItem>
     </ProductGrid>
@@ -15,35 +18,18 @@
 import { mapActions } from 'vuex'
 
 export default {
-  data() {
-    return {
-      intialized: false,
-    }
-  },
   async fetch() {
     await this.getProducts()
 
-    this.setSort({
+    await this.setFilters(this.$route.query)
+
+    await this.setSort({
       sortBy: this.$route.query.sortBy || 'sort_order',
       sortDir: this.$route.query.sortDir || 'ASC',
     })
-
-    this.setFilters({
-      manufacturer: this.$route.query.merk && this.$route.query.merk.split(','),
-      colors: this.$route.query.kleur && this.$route.query.kleur.split(','),
-      has_5g: this.$route.query.vijfg && this.$route.query.vijfg.split(','),
-      operating_system:
-        this.$route.query.besturingssysteem &&
-        this.$route.query.besturingssysteem.split(','),
-      has_esim: this.$route.query.esim && this.$route.query.esim.split(','),
-    })
-
-    this.applySortAndFilters()
-
-    this.intialized = true
   },
   computed: {
-    products() {
+    filteredProducts() {
       return this.$store.state.products.filteredProducts
     },
   },

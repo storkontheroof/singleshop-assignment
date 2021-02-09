@@ -1,12 +1,12 @@
 <template>
   <div class="pa-2">
-    <v-menu offset-y>
+    <v-menu offset-y :close-on-content-click="false">
       <template v-slot:activator="{ on, attrs }">
         <v-btn color="primary" dark v-bind="attrs" v-on="on">
           {{ title }}
         </v-btn>
       </template>
-      <v-list>
+      <v-list class="overflow-y-auto" max-height="350">
         <v-list-item v-for="item in items" :key="item.title">
           <v-checkbox
             v-model="selected"
@@ -14,6 +14,7 @@
             :label="`${item.title} (${item.count})`"
             :value="item.title"
             :selected="selected.includes(item.title)"
+            @change="updateFilters"
           ></v-checkbox>
         </v-list-item>
       </v-list>
@@ -28,16 +29,6 @@
     <!--        :selected="selected.includes(item.title)"-->
     <!--      ></v-checkbox>-->
     <!--    </div>-->
-
-    <!--    <v-select-->
-    <!--        v-model="selected"-->
-    <!--        :items="items"-->
-    <!--        :menu-props="{ maxHeight: '400' }"-->
-    <!--        :label="title"-->
-    <!--        multiple-->
-    <!--        item-text=""-->
-    <!--    >-->
-    <!--    </v-select>-->
   </div>
 </template>
 
@@ -49,6 +40,10 @@ export default {
     }
   },
   props: {
+    name: {
+      type: String,
+      required: true,
+    },
     title: {
       type: String,
       required: true,
@@ -66,6 +61,14 @@ export default {
   },
   created() {
     this.selected = this.value
+  },
+  methods: {
+    updateFilters(values) {
+      this.$store.dispatch('products/updateFilters', {
+        values,
+        name: this.name,
+      })
+    },
   },
 }
 </script>
