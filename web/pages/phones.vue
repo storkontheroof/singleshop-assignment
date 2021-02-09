@@ -2,9 +2,9 @@
   <Container class="section-phones">
     <Heading> Telefoons </Heading>
 
-    <ProductFilters> </ProductFilters>
+    <ProductFilters />
     <ProductGrid>
-      <ProductGridItem v-for="product in products" v-bind:key="product.id">
+      <ProductGridItem v-for="product in products" :key="product.id">
         <ProductCard :product="product" />
       </ProductGridItem>
     </ProductGrid>
@@ -19,20 +19,6 @@ export default {
     return {
       intialized: false,
     }
-  },
-  mounted() {},
-  computed: {
-    products() {
-      return this.$store.state.products.filteredProducts
-    },
-  },
-  methods: {
-    ...mapActions({
-      getProducts: 'products/getProducts',
-      applySortAndFilters: 'products/filterProducts',
-      setSort: 'products/setSort',
-      setFilters: 'products/setFilters',
-    }),
   },
   async fetch() {
     await this.getProducts()
@@ -55,6 +41,19 @@ export default {
     this.applySortAndFilters()
 
     this.intialized = true
+  },
+  computed: {
+    products() {
+      return this.$store.state.products.filteredProducts
+    },
+  },
+  methods: {
+    ...mapActions({
+      getProducts: 'products/getProducts',
+      applySortAndFilters: 'products/filterProducts',
+      setSort: 'products/setSort',
+      setFilters: 'products/setFiltersFromQuery',
+    }),
   },
 }
 </script>

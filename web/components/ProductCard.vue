@@ -2,8 +2,8 @@
   <div class="card product-card">
     <div class="product-colors">
       <ul>
-        <li v-for="color in product.colors" v-bind:key="color">
-          <span v-html="color" />
+        <li v-for="color in product.colors" :key="color">
+          <span> {{ color }}</span>
         </li>
       </ul>
     </div>
@@ -17,17 +17,11 @@
     </picture>
 
     <h3 class="product-title">
-      <strong v-html="product.manufacturer" />
-      <span v-html="product.model" />
+      <strong> {{ product.manufacturer }} </strong>
+      <span> {{ product.model }} </span>
     </h3>
   </div>
 </template>
-
-<style scoped>
-.product-image {
-  height: 240px;
-}
-</style>
 
 <script>
 const imageUrl =
@@ -55,3 +49,9 @@ export default {
   },
 }
 </script>
+
+<style scoped>
+.product-image {
+  height: 240px;
+}
+</style>

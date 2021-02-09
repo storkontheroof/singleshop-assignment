@@ -1,5 +1,5 @@
 <template>
-  <Container fullHeight>
+  <Container full-height>
     <v-responsive
       class="d-flex align-center mx-auto"
       height="100%"

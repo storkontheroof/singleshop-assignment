@@ -83,15 +83,61 @@ const boolFilter = (filterValues, productValue) => {
   )
 }
 
+const getFilteredProducts = (products, filters, current) => {
+  const filteredProducts = products.filter((p) => {
+    const result = filters.reduce((acc, f) => {
+      // current is used for counting
+      if (current && current === f.name) {
+        acc.push(true)
+        return acc
+      }
+
+      switch (f.type) {
+        case 'text':
+          acc.push(textFilter(f.selected, p[f.name]))
+          break
+        case 'array':
+          acc.push(arrayFilter(f.selected, p[f.name]))
+          break
+        case 'bool':
+        case 'boolean':
+          acc.push(boolFilter(f.selected, p[f.name]))
+          break
+        default:
+          // eslint-disable-next-line
+          console.error(`unknown filter type ${f.type}`)
+          acc.push(true)
+          break
+      }
+
+      return acc
+    }, [])
+
+    return !result.includes(false)
+  })
+  return filteredProducts
+}
+
+export const getters = {
+  filters: (state) => state.filters,
+}
+
 export const actions = {
   async getProducts({ commit, state }) {
     await this.$axios.$get('/phones').then((res) => {
       commit('setProducts', res.products)
     })
   },
-  setFilters({ commit, state }, filters) {
+  setFiltersFromQuery({ commit, state }, query) {
+    const filters = state.filters.map((filter) => {
+      if (query[filter.name]) {
+        filter.selected = query[filter.name]
+      }
+      return filter
+    })
     commit('setFilters', filters)
   },
+
   setSort({ commit, state }, { sortBy = 'sort_order', sortOrder = 'ASC' }) {
     commit('setSort', {
       sortBy,
@@ -99,30 +145,8 @@ export const actions = {
     })
   },
   filterProducts({ commit, state }) {
-    const filteredProducts = state.products.filter((product) => {
-      const result = state.filters.reduce((acc, filter, n) => {
-        switch (filter.type) {
-          case 'text':
-            acc.push(textFilter(filter.selected, product[filter.name]))
-            break
-          case 'array':
-            acc.push(arrayFilter(filter.selected, product[filter.name]))
-            break
-          case 'bool':
-          case 'boolean':
-            acc.push(boolFilter(filter.selected, product[filter.name]))
-            break
-          default:
-            console.error(`unknown filter type ${filter.type}`)
-            acc.push(true)
-            break
-        }
-
-        return acc
-      }, [])
-
-      return !result.includes(false)
-    })
+    // filter products
+    const filteredProducts = getFilteredProducts(state.products, state.filters)
 
     // apply sort
     const sortedFilteredProducts = filteredProducts.sort(sortBy(state.sort))
@@ -130,7 +154,42 @@ export const actions = {
     // commit
     commit('setFilteredProducts', sortedFilteredProducts)
 
-    // TODO: count items per filter
+    // items per filter
+    const filters = state.filters.map((filter) => {
+      const products = getFilteredProducts(
+        sortedFilteredProducts,
+        state.filters,
+        filter.name
+      )
+
+      // items will be {key: count, key2: count}
+      const items = products.reduce((acc, p) => {
+        switch (filter.type) {
+          case 'boolean':
+            acc[p[filter.name]] = acc[p[filter.name]] + 1 || 1
+            break
+          case 'text':
+            acc[p[filter.name]] = acc[p[filter.name]] + 1 || 1
+            break
+          case 'array':
+            p[filter.name].forEach((val) => (acc[val] = acc[val] + 1 || 1))
+            break
+        }
+
+        return acc
+      }, {})
+
+      filter.items = Object.keys(items).map((key) => {
+        return {
+          title: key,
+          count: items[key],
+        }
+      })
+
+      return filter
+    })
+
+    commit('setFilters', filters)
   },
 }
 
@@ -142,12 +201,7 @@ export const mutations = {
     state.filteredProducts = products
   },
   setFilters(state, filters) {
-    state.filters = state.filters.map((filter) => {
-      if (filters[filter.name]) {
-        filter.selected = filters[filter.name]
-      }
-      return filter
-    })
+    state.filters = filters
   },
   setSort(state, sort) {
     state.sort = sort

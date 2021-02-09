@@ -35,7 +35,7 @@ export default {
       },
     },
     size: {
-      type: Number,
+      type: [String, Number],
       default: 3,
     },
     space: {
@@ -54,7 +54,10 @@ export default {
       type: String,
       default: 'h1',
     },
-    title: String,
+    title: {
+      type: String,
+      default: '',
+    },
     weight: {
       type: String,
       default: 'black',
