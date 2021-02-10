@@ -158,8 +158,9 @@ export const actions = {
   },
 
   async setFiltersFromQuery({ commit, state }, query) {
+    const queryKeys = Object.keys(query)
     const filters = state.filters.map((filter) => {
-      const slug = Object.keys(query).find((slug) => slug === filter.slug)
+      const slug = queryKeys.find((slug) => slug === filter.slug)
 
       if (slug) {
         filter.value = query[slug].includes(',')
@@ -216,13 +217,6 @@ export const mutations = {
 
   setSort(state, sort) {
     state.sort = sort
-  },
-
-  setFilter(state, filter) {
-    state.filters = {
-      ...state.filters,
-      ...filter,
-    }
   },
 
   updateFilters(state, { name, values }) {
