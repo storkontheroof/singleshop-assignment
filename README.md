@@ -9,15 +9,19 @@ My attempt to rebuild the SingleShop Phones page.
 # Build setup 
 ```bash
 # clone the repo
-$ git clone git@github.com:storkontheroof/singleshop-assignment.git
+$ git clone git@github.com:storkontheroof/singleshop-web.git
 
 # install dependencies (uses Lerna to install in web & api packages too)
 $ npm install
 
-# serve web with hot reload at localhost:3000 and 
-# serve api in watch mode at localhost:3001
+# serve in development 
 $ npm run dev
+
+# serve in production mode 
+$ npm run prd
 ```
 
-Visit http://localhost:3000
+Web: http://localhost:3000
+
+Api: http://localhost:3001/phones
 

@@ -3,11 +3,8 @@
 Simple Express server that serves the phones JSON.
 
 ```bash
-# clone the repo
-$ git clone git@github.com:storkontheroof/singleshop-assignment.git
-
 # install dependencies
-$ npm run 
+$ npm i 
 
 # run in watch mode on http://localhost:3001
 npm run dev
