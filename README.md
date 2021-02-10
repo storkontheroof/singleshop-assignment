@@ -1,5 +1,5 @@
 # SingleShop Assignment
-My attempt to rebuild the SingleShop Phones page.
+Sample project with Nuxt (Vue, Vuex & Vuetify) to build a basic website for a phoneshop.
 
 ## Requirements
 ```bash
