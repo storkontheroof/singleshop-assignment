@@ -52,9 +52,6 @@ export default {
     },
   },
   methods: {
-    getImageUrl(src) {
-      return imageUrl.replace('##SRC##', src)
-    },
     setVariant() {
       this.variant = this.product.variants.find(
         (variant) => variant.attributes.color === this.color
